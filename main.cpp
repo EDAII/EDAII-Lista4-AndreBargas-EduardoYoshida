@@ -28,7 +28,7 @@ public:
 
     void display(avl_node *, int);
     void preorder(avl_node *);
-    void search(int num);
+    int search(avl_node *, int num);
     avlTree()
     {
         root = NULL;
@@ -39,6 +39,7 @@ public:
 int main(){
 
     int choice, item;
+    int resultado;
 
     avlTree avl;
 
@@ -46,41 +47,51 @@ int main(){
         cout<<"\n---------------------"<<endl;
         cout<<"Árvore AVL"<<endl;
         cout<<"\n---------------------"<<endl;
-        cout<<"1.Insert Element into the tree"<<endl;
-        cout<<"2.Display Balanced AVL Tree"<<endl;
+        cout<<"1.Inserir Elemento"<<endl;
+        cout<<"2.Imprimir Árvore AVL"<<endl;
         cout<<"3.PreOrder traversal"<<endl;
-        cout<<"4.Exit"<<endl;
-        cout<<"Enter your Choice: ";
+        cout<<"4.Busca"<<endl;
+        cout<<"Selecione uma opção: ";
         cin>>choice;
 
         switch(choice){
         case 1:
-            cout<<"Enter value to be inserted: ";
+            cout<<"Valor para ser inserido: ";
             cin>>item;
             root = avl.insert(root, item);
             break;
 
         case 2:
             if (root == NULL){
-                cout<<"Tree is Empty"<<endl;
+                cout<<"Árvore Vazia"<<endl;
                 continue;
             }
-            cout<<"Balanced AVL Tree:"<<endl;
+            cout<<"Árvore AVL balanceada:"<<endl;
             avl.display(root, 1);
             break;
 
         case 3:
-            cout<<"Preorder Traversal:"<<endl;
+            cout<<"Preordem Traversal:"<<endl;
             avl.preorder(root);
             cout<<endl;
             break;
 
+        case 5:
+            cout<<"Pesquisar: ";
+            cin>>item;
+            resultado = avl.search(root, item);
+            if(resultado == -1){
+              cout << "Valor não encontrado ou árvore vazia";
+            }else{
+              cout<<"Valor Encontrado: "<< avl.search(root, item)<<endl;
+            }
+            break;
         case 4:
             exit(1);
             break;
 
         default:
-            cout<<"Wrong Choice"<<endl;
+            cout<<"Escolha inválida"<<endl;
         }
     }
     return 0;
@@ -178,6 +189,19 @@ avl_node *avlTree::insert(avl_node *root, int value){
     return root;
 }
 
+int avlTree::search(avl_node *node, int value){
+    if(node == NULL){
+      return -1;
+    }else if( value == node->data){
+      return node->data;
+    }else if(value < node->data){
+      search(node->left, value);
+    }else if(value > node->data){
+      search(node->right, value);
+    }else{
+      return -1;
+    }
+}
 
 void avlTree::display(avl_node *ptr, int level){
     int i;
